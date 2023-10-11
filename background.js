@@ -1,3 +1,10 @@
+chrome.webRequest.onCompleted.addListener((event) => {
+    if (event.url.includes('streaks'))
+        console.log(event);
+},
+    { urls: ["<all_urls>"] }
+)
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === "complete") {
         const currentUrl = tab.url;
@@ -11,16 +18,18 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             // Add more allowed URLs here
         ];
 
-        if (!hasSearchQuery(currentUrl) && !allowedUrls.some(allowedUrl => currentUrl.startsWith(allowedUrl))) {
-            // If the current URL is not in the allowed list and doesn't contain a search query, redirect to a default URL
+        // Check if the current tab is a new tab
+        if (tab.url === "chrome://newtab/") {
+            return; // Do nothing for new tabs
+        }
+
+        if (!isAllowedUrl(currentUrl, allowedUrls)) {
+            // If the current URL is not in the allowed list, redirect to a default URL
             chrome.tabs.update(tabId, { url: "https://purmerend.jarvis.bit-academy.nl" });
         }
     }
 });
 
-function hasSearchQuery(url) {
-    // Check if the URL contains a query parameter (e.g., "?q=")
-    const queryParameter = "?q=";
-
-    return url.includes(queryParameter);
+function isAllowedUrl(url, allowedUrls) {
+    return allowedUrls.some(allowedUrl => url.startsWith(allowedUrl));
 }
