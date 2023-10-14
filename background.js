@@ -1,9 +1,44 @@
-chrome.webRequest.onCompleted.addListener((event) => {
-    if (event.url.includes('streaks'))
-        console.log(event);
-},
-    { urls: ["<all_urls>"] }
-)
+const fetchedURLs = {};
+
+chrome.webRequest.onCompleted.addListener(event => {
+    if (event.url.includes('streaks')) {
+        // Check if the URL has already been fetched
+        if (fetchedURLs[event.url]) {
+            return;
+        }
+        
+        // Mark the URL as fetched
+        fetchedURLs[event.url] = true;
+
+        // Fetch the JSON data from the URL
+        fetch(event.url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Now you have the JSON data in the 'data' variable
+                // You can access the values in the JSON like in the previous example
+                const currentStreakLength = data.currentStreakLength;
+                const daysThisWeek = data.daysThisWeek;
+                const freezesAvailable = data.freezesAvailable;
+
+                // You can use these variables as needed
+                console.log('Current Streak Length: ' + currentStreakLength);
+                console.log('Days This Week: ', daysThisWeek);
+                console.log('Freezes Available: ' + freezesAvailable);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation: ' + error.message);
+            });
+    }
+    return;
+}, { urls: ["<all_urls>"] });
+
+  
+  
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === "complete") {
