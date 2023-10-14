@@ -29,16 +29,32 @@ chrome.webRequest.onCompleted.addListener(event => {
                 console.log('Current Streak Length: ' + currentStreakLength);
                 console.log('Days This Week: ', daysThisWeek);
                 console.log('Freezes Available: ' + freezesAvailable);
+                
+                // Check if dayOfWeek is connected to daysThisWeek (adjust based on data structure)
+                if (Array.isArray(daysThisWeek) && daysThisWeek.includes(dayOfWeek)) {
+                    console.log(`Day of the week ${dayOfWeek} is connected to daysThisWeek.`);
+                } else {
+                    console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
+                }
+                
+                // Allow access to any URL after a successful fetch
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation: ' + error.message);
+                // Handle the error by using the same logic as in isAllowedUrl
+                if (!isAllowedUrl(event.url, allowedUrls)) {
+                    // If the current URL is not in the allowed list, redirect to a default URL
+                    chrome.tabs.update({ url: "https://purmerend.jarvis.bit-academy.nl" });
+                }
             });
     }
     return;
 }, { urls: ["<all_urls>"] });
 
-  
-  
+var today = new Date();
+var dayOfWeek = (today.getDay() - 1 + 7) % 7;
+
+console.log(dayOfWeek); // Output: 1 (for Monday, assuming today is a Monday)
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === "complete") {
