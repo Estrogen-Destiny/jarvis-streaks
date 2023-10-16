@@ -27,15 +27,15 @@ chrome.webRequest.onCompleted.addListener(event => {
 
                 // You can use these variables as needed
                 console.log('Current Streak Length: ' + currentStreakLength);
-                console.log('Days This Week: ', daysThisWeek);
+                console.log(daysThisWeek);
                 console.log('Freezes Available: ' + freezesAvailable);
                 
                 // Check if dayOfWeek is connected to daysThisWeek (adjust based on data structure)
-                if (Array.isArray(daysThisWeek) && daysThisWeek.includes(dayOfWeek)) {
+                if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
                     console.log(`Day of the week ${dayOfWeek} is connected to daysThisWeek.`);
                 } else {
                     console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
-                }
+                }             
                 
                 // Allow access to any URL after a successful fetch
             })
