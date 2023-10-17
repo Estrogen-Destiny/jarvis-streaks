@@ -4,13 +4,14 @@
   "version": "1.0",
   "description": "Jarvis Streaks is a chrome extension that helps you to keep track of your streaks on Jarvis",
   "permissions": ["tabs", "activeTab", "webRequest"],
+  "icons":  { 
+              "48": "icons/logo-48.png",
+              "128": "icons/logo-128.png" 
+            },
   "host_permissions": [
     "https://purmerend.jarvis.bit-academy.nl/*"
   ],
   "background": {
     "service_worker": "background.js"
-  },
-  "action": {
-    "default_icon": "icons/logo.png"
   }
 }
