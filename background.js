@@ -7,7 +7,7 @@ chrome.webRequest.onCompleted.addListener(event => {
         if (fetchedURLs[event.url]) {
             return;
         }
-        
+
         // Mark the URL as fetched
         fetchedURLs[event.url] = true;
 
@@ -30,7 +30,7 @@ chrome.webRequest.onCompleted.addListener(event => {
                 console.log('Current Streak Length: ' + currentStreakLength);
                 console.log(daysThisWeek);
                 console.log('Freezes Available: ' + freezesAvailable);
-                
+
                 // Check if dayOfWeek is connected to daysThisWeek (adjust based on data structure)
                 if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
                     let searchPower = true;
@@ -38,8 +38,8 @@ chrome.webRequest.onCompleted.addListener(event => {
                 } else {
                     console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
                     console.log(searchPower);
-                }             
-                
+                }
+
                 // Allow access to any URL after a successful fetch
             })
             .catch(error => {
@@ -62,32 +62,31 @@ console.log(dayOfWeek); // Output: 1 (for Monday, assuming today is a Monday)
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === "complete") {
         const currentUrl = tab.url;
-        const allowedUrls = [
-            "https://chat.openai.com/",
-            "https://stackoverflow.com/",
-            "https://www.google.com/",
-            "https://purmerend.jarvis.bit-academy.nl",
-            "chrome://extensions/",
-            "https://chat.jarvis.bit-academy.nl/"
-            // Add more allowed URLs here
-        ];
+                    const allowedUrls = [
+                "https://chat.openai.com/",
+                "https://stackoverflow.com/",
+                "https://www.google.com/",
+                "https://purmerend.jarvis.bit-academy.nl",
+                "chrome://extensions/",
+                "https://chat.jarvis.bit-academy.nl/"
+                // Add more allowed URLs here
+            ];
 
         // Check if the current tab is a new tab
         if (tab.url === "chrome://newtab/") {
             return; // Do nothing for new tabs
         }
 
-        if (!isAllowedUrl(currentUrl, allowedUrls)) {
-            // If the current URL is not in the allowed list and searchPower is true, redirect to a default URL
-            chrome.tabs.update(tabId, { url: "https://purmerend.jarvis.bit-academy.nl" });
+            if (!isAllowedUrl(currentUrl, allowedUrls)) {
+                // If the current URL is not in the allowed list and searchPower is true, redirect to a default URL
+                chrome.tabs.update(tabId, { url: "https://purmerend.jarvis.bit-academy.nl" });
+            }
         }
-    }
-});
+    });
 
 function isAllowedUrl(url, allowedUrls) {
     return allowedUrls.some(allowedUrl => url.startsWith(allowedUrl));
 }
 
-console.log('%cThis message is brought to you by %cDylan Kuiper', 'font-weight: bold; color: blue;', 'font-weight: normal; color: black;');
-console.log('%cGitHub: %chttps://github.com/Dylan-Kuiper)', 'font-weight: bold; color: blue;', 'font-weight: normal; color: black;');
-console.log('%cThe path to your %cdestiny%c begins with a steady streak.', 'font-weight: bold; color: red;', 'font-weight: normal; color: black;', 'font-weight: bold; color: red;');
+console.log('%cGitHub: %c(https://github.com/Dylan-Kuiper)', 'font-weight: bold; color: blue;', 'font-weight: normal; color: black;');
+console.log('%cThe path to your %cdestiny%c begins with a steady streak.', 'font-weight: bold; color: red;', 'font-weight: bold; color: deepPink;', 'font-weight: bold; color: red;');
