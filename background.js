@@ -87,3 +87,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 function isAllowedUrl(url, allowedUrls) {
     return allowedUrls.some(allowedUrl => url.startsWith(allowedUrl));
 }
+
+console.log('%cThis message is brought to you by %cDylan Kuiper', 'font-weight: bold; color: blue;', 'font-weight: normal; color: black;');
+console.log('%c(GitHub: %chttps://github.com/Dylan-Kuiper%c)', 'font-weight: bold; color: blue;', 'font-weight: normal; color: black;');
+console.log('%cThe path to your %cdestiny%c begins with every step you take.', 'font-weight: bold; color: red;', 'font-weight: normal; color: black;', 'font-weight: bold; color: red;');
