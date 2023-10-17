@@ -1,4 +1,5 @@
 const fetchedURLs = {};
+let searchPower = false; // Declare searchPower at a higher scope
 
 chrome.webRequest.onCompleted.addListener(event => {
     if (event.url.includes('streaks')) {
@@ -32,9 +33,11 @@ chrome.webRequest.onCompleted.addListener(event => {
                 
                 // Check if dayOfWeek is connected to daysThisWeek (adjust based on data structure)
                 if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
-                    console.log(`Day of the week ${dayOfWeek} is connected to daysThisWeek.`);
+                    let searchPower = true;
+                    console.log(searchPower);
                 } else {
                     console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
+                    console.log(searchPower);
                 }             
                 
                 // Allow access to any URL after a successful fetch
@@ -74,8 +77,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             return; // Do nothing for new tabs
         }
 
-        if (!isAllowedUrl(currentUrl, allowedUrls)) {
-            // If the current URL is not in the allowed list, redirect to a default URL
+        if (!isAllowedUrl(currentUrl, allowedUrls) && searchPower == true) {
+            // If the current URL is not in the allowed list and searchPower is true, redirect to a default URL
             chrome.tabs.update(tabId, { url: "https://purmerend.jarvis.bit-academy.nl" });
         }
     }
