@@ -77,7 +77,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             return; // Do nothing for new tabs
         }
 
-        if (!isAllowedUrl(currentUrl, allowedUrls) && searchPower == true) {
+        if (!isAllowedUrl(currentUrl, allowedUrls)) {
             // If the current URL is not in the allowed list and searchPower is true, redirect to a default URL
             chrome.tabs.update(tabId, { url: "https://purmerend.jarvis.bit-academy.nl" });
         }
@@ -89,5 +89,5 @@ function isAllowedUrl(url, allowedUrls) {
 }
 
 console.log('%cThis message is brought to you by %cDylan Kuiper', 'font-weight: bold; color: blue;', 'font-weight: normal; color: black;');
-console.log('%c(GitHub: %chttps://github.com/Dylan-Kuiper%c)', 'font-weight: bold; color: blue;', 'font-weight: normal; color: black;');
-console.log('%cThe path to your %cdestiny%c begins with every step you take.', 'font-weight: bold; color: red;', 'font-weight: normal; color: black;', 'font-weight: bold; color: red;');
+console.log('%cGitHub: %chttps://github.com/Dylan-Kuiper)', 'font-weight: bold; color: blue;', 'font-weight: normal; color: black;');
+console.log('%cThe path to your %cdestiny%c begins with a steady streak.', 'font-weight: bold; color: red;', 'font-weight: normal; color: black;', 'font-weight: bold; color: red;');
