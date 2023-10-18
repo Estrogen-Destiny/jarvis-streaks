@@ -17,20 +17,13 @@ chrome.webRequest.onCompleted.addListener(event => {
                 return response.json();
             })
             .then(data => {
-                const currentStreakLength = data.currentStreakLength;
                 const daysThisWeek = data.daysThisWeek;
-                const freezesAvailable = data.freezesAvailable;
-
-                console.log('Current Streak Length: ' + currentStreakLength);
                 console.log(daysThisWeek);
-                console.log('Freezes Available: ' + freezesAvailable);
 
                 if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
                     searchPower = true;
-                    console.log(searchPower);
                 } else {
                     console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
-                    console.log(searchPower);
                 }
             })
             .catch(error => {
@@ -66,7 +59,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             return;
         }
 
-        if (!isAllowedUrl(currentUrl, allowedUrls) && !searchPower) { 
+        if (!isAllowedUrl(currentUrl, allowedUrls) && !searchPower) {
             chrome.tabs.update(tabId, { url: "https://purmerend.jarvis.bit-academy.nl" });
         }
     }
