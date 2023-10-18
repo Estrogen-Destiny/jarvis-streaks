@@ -26,7 +26,7 @@ chrome.webRequest.onCompleted.addListener(event => {
                 console.log('Freezes Available: ' + freezesAvailable);
 
                 if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
-                    searchPower = true; // Set the global searchPower to true
+                    searchPower = true;
                     console.log(searchPower);
                 } else {
                     console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
@@ -66,7 +66,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             return;
         }
 
-        if (!isAllowedUrl(currentUrl, allowedUrls) && !searchPower) { // Check if searchPower is false
+        if (!isAllowedUrl(currentUrl, allowedUrls) && !searchPower) { 
             chrome.tabs.update(tabId, { url: "https://purmerend.jarvis.bit-academy.nl" });
         }
     }
