@@ -1,6 +1,20 @@
 const fetchedURLs = {};
 let searchPower = false;
 
+chrome.runtime.onStartup.addListener(() => {
+    chrome.tabs.create({ url: "https://purmerend.jarvis.bit-academy.nl" }, (tab) => {
+        // Listen for tab updates
+        chrome.tabs.onUpdated.addListener(function onUpdatedListener(tabId, changeInfo) {
+            if (tabId === tab.id && changeInfo.status === "complete") {
+                // Page is fully loaded, close the tab
+                chrome.tabs.remove(tab.id);
+                // Remove the listener to avoid unnecessary checks
+                // chrome.tabs.onUpdated.removeListener(onUpdatedListener);
+            }
+        });
+    });
+});
+
 chrome.webRequest.onCompleted.addListener(event => {
     if (event.url.includes('streaks')) {
         if (fetchedURLs[event.url]) {
