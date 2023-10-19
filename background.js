@@ -52,7 +52,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             "https://www.google.com/",
             "https://purmerend.jarvis.bit-academy.nl",
             "chrome://extensions/",
-            "https://chat.jarvis.bit-academy.nl/"
+            "https://chat.jarvis.bit-academy.nl/",
+            "http://localhost"
         ];
 
         if (tab.url === "chrome://newtab/") {
