@@ -7,7 +7,7 @@ The Streak Tracker Extension is a Chrome extension that helps you track your dai
 - upon first time visiting a url you get redirected so the extension checks if ur streak is onpoint if not you can only visit some specific urls.
 - Redirects to a specific URL if you havent done your daily commit.
 
-## Prerequisites
+## Requirements
 
 Before setting up the extension, make sure you have the following prerequisites:
 
