@@ -42,24 +42,16 @@ function onCompleted(event) {
                     searchPower = true;
                 }
 
-                // if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
-                //     searchPower = true;    
-                // } else {
-                //     console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
-                // }
+                if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
+                    searchPower = true;    
+                } else {
+                    console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
+                }
 
                 if (searchPower == true){
                     chrome.tabs.remove(createdTab.id);
                 }
             })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation: ' + error.message);
-                if (!isAllowedUrl(event.url, allowedUrls)) {
-                    if (!searchPower) {
-                        chrome.tabs.update({ url: "https://purmerend.jarvis.bit-academy.nl" });
-                    }
-                }
-            });
     }
     return;
 }
