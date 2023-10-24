@@ -33,14 +33,23 @@ function onCompleted(event) {
             })
             .then(data => {
                 const daysThisWeek = data.daysThisWeek;
+                const freezesAvailable = data.freezesAvailable;
                 console.log("Days this week:", daysThisWeek);
                 console.log("dayOfWeek:", dayOfWeek);
+                console.log(freezesAvailable);
 
-                if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
+                if (freezesAvailable != 0){
                     searchPower = true;
+                }
+
+                // if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
+                //     searchPower = true;    
+                // } else {
+                //     console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
+                // }
+
+                if (searchPower == true){
                     chrome.tabs.remove(createdTab.id);
-                } else {
-                    console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
                 }
             })
             .catch(error => {
@@ -53,6 +62,12 @@ function onCompleted(event) {
             });
     }
     return;
+}
+
+function removeStartPage(){
+    if (searchPower == true){
+        chrome.tabs.remove(createdTab.id);
+    }
 }
 
 function initializeDayOfWeek() {
