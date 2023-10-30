@@ -3,7 +3,7 @@ let searchPower = false;
 let dayOfWeek;
 
 function onStartup() {
-    chrome.tabs.create({ url: "https://purmerend.jarvis.bit-academy.nl" }, (tab) => {
+    chrome.tabs.create({ url: "https://jarvis.bit-academy.nl/" }, (tab) => {
         createdTab = tab;
         chrome.tabs.onUpdated.addListener(function onUpdatedListener(tabId, changeInfo) {
             if (tabId === tab.id && changeInfo.status === "complete") {
@@ -38,26 +38,45 @@ function onCompleted(event) {
                 console.log("dayOfWeek:", dayOfWeek);
                 console.log(freezesAvailable);
 
-                if (freezesAvailable != 0){
+                if (freezesAvailable != 0) {
                     searchPower = true;
                 }
 
                 if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
-                    searchPower = true;    
+                    searchPower = true;
                 } else {
                     console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
                 }
 
-                if (searchPower == true){
+                if (searchPower == true) {
                     chrome.tabs.remove(createdTab.id);
                 }
             })
     }
-    return;
+    if (event.url.includes('locations/current')) {
+        if (fetchedURLs["https://purmerend.jarvis.bit-academy.nl/api/v1/locations/current"]) {
+            return;
+        }
+
+        fetchedURLs["https://purmerend.jarvis.bit-academy.nl/api/v1/locations/current"] = true;
+        fetch("https://purmerend.jarvis.bit-academy.nl/api/v1/locations/current")
+            .then(response => {
+                if (!response.ok) {
+                    throw Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Process data from the additional URL here
+                const location = data.domain;
+                // You can do whatever you need with this data
+            });
+        return;
+    }
 }
 
-function removeStartPage(){
-    if (searchPower == true){
+function removeStartPage() {
+    if (searchPower == true) {
         chrome.tabs.remove(createdTab.id);
     }
 }
@@ -86,7 +105,7 @@ function onTabsUpdated(tabId, changeInfo, tab) {
         }
 
         if (!isAllowedUrl(currentUrl, allowedUrls) && !searchPower) {
-            chrome.tabs.update(tabId, { url: "https://purmerend.jarvis.bit-academy.nl" });
+            chrome.tabs.update(tabId, { url: location });
         }
     }
 }
