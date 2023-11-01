@@ -1,7 +1,6 @@
 # Jarvis Streaks Extension
 
-The Streak Tracker Extension is a Chrome extension that helps you track your daily streaks. It redirects you to a specific URL if you miss your daily goals. This README provides information on how to set up and use the extension.![download](https://github.com/Dylan-Kuiper/jarvis-streaks/assets/83163353/7d877eb4-de22-49bb-867f-729e8c4d2a1d)
-
+The Streak Tracker Extension is a Chrome extension that helps you track your daily streaks. It redirects you to a specific URL if you miss your daily goals. This README provides information on how to set up and use the extension.
 
 ## Features
 
@@ -41,7 +40,6 @@ Follow these steps to install and set up the Streak Tracker Extension:
    - Navigate to the folder where you extracted the downloaded ZIP file and select the extension's folder.
    - Click "Open."
 ![load](https://github.com/Dylan-Kuiper/jarvis-streaks/assets/83163353/3b1a2d52-a586-4ff6-bc06-d1e0e60c2631)
-
 
 8. **Reload the Extension**:
    After loading the extension, click the "Reload" button for your extension in the Extensions page to apply the updates.
