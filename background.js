@@ -53,26 +53,6 @@ function onCompleted(event) {
                 }
             })
     }
-    if (event.url.includes('locations/current')) {
-        if (fetchedURLs["https://purmerend.jarvis.bit-academy.nl/api/v1/locations/current"]) {
-            return;
-        }
-
-        fetchedURLs["https://purmerend.jarvis.bit-academy.nl/api/v1/locations/current"] = true;
-        fetch("https://purmerend.jarvis.bit-academy.nl/api/v1/locations/current")
-            .then(response => {
-                if (!response.ok) {
-                    throw Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Process data from the additional URL here
-                const location = data.domain;
-                // You can do whatever you need with this data
-            });
-        return;
-    }
 }
 
 function removeStartPage() {
@@ -94,9 +74,8 @@ function onTabsUpdated(tabId, changeInfo, tab) {
             "https://chat.openai.com/",
             "https://stackoverflow.com/",
             "https://www.google.com/",
-            "https://purmerend.jarvis.bit-academy.nl",
+            "jarvis.bit-academy.nl",
             "chrome://extensions/",
-            "https://chat.jarvis.bit-academy.nl/",
             "http://localhost"
         ];
 
@@ -105,13 +84,13 @@ function onTabsUpdated(tabId, changeInfo, tab) {
         }
 
         if (!isAllowedUrl(currentUrl, allowedUrls) && !searchPower) {
-            chrome.tabs.update(tabId, { url: location });
+            chrome.tabs.update(tabId, { url: "https://jarvis.bit-academy.nl" });
         }
     }
 }
 
 function isAllowedUrl(url, allowedUrls) {
-    return allowedUrls.some(allowedUrl => url.startsWith(allowedUrl));
+    return allowedUrls.some(allowedUrl => url.includes(allowedUrl));
 }
 
 function logInfo() {
