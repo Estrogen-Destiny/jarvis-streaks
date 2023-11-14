@@ -1,4 +1,4 @@
-const fetchedURLs = {};
+const fetchedURLs = [];
 let searchPower = false;
 let dayOfWeek;
 
@@ -13,11 +13,11 @@ function onStartup() {
             }
         });
     });
+    listenForHandinXHR();
 }
 
-
 function onCompleted(event) {
-    if (event.url.includes('streaks')) {
+    if (event.url.includes('exercise') || event.url.includes('streaks')) {
         if (fetchedURLs[event.url]) {
             return;
         }
@@ -29,37 +29,89 @@ function onCompleted(event) {
                 if (!response.ok) {
                     throw Error('Network response was not ok');
                 }
-                return response.json();
+                return response.text(); // Change this line to get the response as text
             })
             .then(data => {
-                const daysThisWeek = data.daysThisWeek;
-                const freezesAvailable = data.freezesAvailable;
-                console.log("Days this week:", daysThisWeek);
-                console.log("dayOfWeek:", dayOfWeek);
-                console.log(freezesAvailable);
+                console.log("Response text:", data); // Log the response text
 
-                if (freezesAvailable != 0) {
-                    searchPower = true;
-                }
+                // Now try to parse as JSON
+                try {
+                    const jsonData = JSON.parse(data);
+                    // Handle the parsed JSON data
+                    if (event.url.includes('exercise')) {
+                        const implementationId = jsonData.implementationId;
+                        console.log(implementationId);
+                    } else if (event.url.includes('streaks')) {
+                        const daysThisWeek = jsonData.daysThisWeek;
+                        const freezesAvailable = jsonData.freezesAvailable;
+                        console.log("Days this week:", daysThisWeek);
+                        console.log("dayOfWeek:", dayOfWeek);
+                        console.log(freezesAvailable);
 
-                if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
-                    searchPower = true;
-                } else {
-                    console.log(`Day of the week ${dayOfWeek} is not connected to daysThisWeek.`);
-                }
+                        if (freezesAvailable != 0) {
+                            searchPower = true;
+                        }
 
-                if (searchPower == true) {
-                    chrome.tabs.remove(createdTab.id);
+                        if (daysThisWeek.hasOwnProperty(dayOfWeek)) {
+                            searchPower = true;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
                 }
             })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    }
+    if (event.url.includes('hand-in')) {
+        listenForHandinXHR();
     }
 }
 
-function removeStartPage() {
-    if (searchPower == true) {
-        chrome.tabs.remove(createdTab.id);
+function listenForHandinXHR() {
+    const handinEndpoint = "https://your-api-url/handin"; // Replace with your actual "handin" API endpoint
+
+    // Use chrome.webRequest to listen for XHR events on the "handin" endpoint
+    chrome.webRequest.onCompleted.addListener(
+        function (details) {
+            // Check if the response code is 204
+            if (details.url === handinEndpoint && details.statusCode === 204) {
+                searchPower = true;
+            }
+        },
+        { urls: [handinEndpoint], types: ["xmlhttprequest"] }
+    );
+}
+
+if (!searchPower) {
+    function checkTimeAndSetSearchPower() {
+        const currentTime = new Date();
+        const pauses = [
+            { start: { hours: 11, minutes: 0 }, end: { hours: 11, minutes: 15 } },
+            { start: { hours: 12, minutes: 30 }, end: { hours: 13, minutes: 15 } },
+            { start: { hours: 14, minutes: 15 }, end: { hours: 14, minutes: 30 } }
+        ];
+
+        // Check if the current time is within one of the specified pauses
+        const isInPause = pauses.some(pause => {
+            const startPauseTime = new Date(currentTime);
+            startPauseTime.setHours(pause.start.hours, pause.start.minutes, 0);
+
+            const endPauseTime = new Date(currentTime);
+            endPauseTime.setHours(pause.end.hours, pause.end.minutes, 0);
+
+            return currentTime >= startPauseTime && currentTime <= endPauseTime;
+        });
+
+        if (isInPause) {
+            searchPower = true;
+        } else {
+            searchPower = false;
+        }
     }
 }
+
 
 function initializeDayOfWeek() {
     var today = new Date();
@@ -103,3 +155,4 @@ chrome.webRequest.onCompleted.addListener(onCompleted, { urls: ["<all_urls>"] })
 initializeDayOfWeek();
 chrome.tabs.onUpdated.addListener(onTabsUpdated);
 logInfo();
+//make a xhr listener that listens to url handin api endoint and if 204 then searchpower is true
